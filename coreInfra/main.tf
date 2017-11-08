@@ -33,3 +33,11 @@ resource "aws_subnet" "pub2" {
     Name = "public_subnet_az2"
   }
 }
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = "${aws_vpc.main.id}"
+
+  tags {
+    Name = "public Internet gateway"
+  }
+}
