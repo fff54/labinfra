@@ -54,3 +54,13 @@ resource "aws_route_table" "public" {
     Name = "route table - lab 4 test"
   }
 }
+
+resource "aws_route_table_association" "public_az1" {
+  subnet_id      = "${aws_subnet.pub1.id}"
+  route_table_id = "${aws_route_table.public.id}"
+}
+
+resource "aws_route_table_association" "public_az2" {
+  subnet_id      = "${aws_subnet.pub2.id}"
+  route_table_id = "${aws_route_table.public.id}"
+}
