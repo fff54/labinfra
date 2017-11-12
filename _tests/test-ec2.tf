@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "eu-west-1"
+}
+
 # Create a new instance of the latest Ubuntu 14.04 on an
 # t2.micro node with an AWS Tag naming it "HelloWorld"
 
@@ -20,7 +24,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "web" {
   ami                    = "${data.aws_ami.ubuntu.id}"
   instance_type          = "t2.micro"
-  subnet_id              = "${aws_subnet.pub1.id}"
+  subnet_id              = "${element(data.terraform_remote_state.coreinfra.subnets,0)}"
   vpc_security_group_ids = ["${aws_security_group.allow_ssh.id}"]
   key_name               = "gitD2SI"
 
@@ -32,7 +36,7 @@ resource "aws_instance" "web" {
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_all"
   description = "Allow ssh trafic"
-  vpc_id      = "${aws_vpc.main.id}"
+  vpc_id      = "${data.terraform_remote_state.coreinfra.vpc_id}"
 
   ingress {
     from_port   = 22
